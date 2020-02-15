@@ -47,11 +47,10 @@ app = Flask(__name__)
 def predict():
 	data = request.get_json(force=True)
 	img_b64 = data['img_b64'].split('data:image/png;base64,')[1]
-	print(img_b64)
-
 	img_data = base64.b64decode(img_b64)
 	with open('img.jpg', 'wb') as f:
 		f.write(img_data)
+
 	ingredients = detect_text()
 	r = detect_bad_effects(ingredients)
 	print(r)
