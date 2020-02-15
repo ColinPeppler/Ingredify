@@ -52,19 +52,13 @@ save.addEventListener('click',(e)=>{
   dwn.download = 'imagename.png';
   dwn.setAttribute('href',imgSrc);
 
-  var image = new Image();
-	image.src = imgSrc
-
   var xhr = new XMLHttpRequest();
 
-	endpoint = 'http://127.0.0.1:5000/readtext'
-	xhr.open('post', endpoint, true);
+  endpoint = 'http://127.0.0.1:5000/readtext'
+  xhr.open('post', endpoint, true);
 
-	var formData = new FormData();
-	formData.append("img_file", image);
-
-	data = {'img_b64' : imgSrc}
-	xhr.send(JSON.stringify(data));
+  data = {'img_b64' : imgSrc}
+  xhr.send(JSON.stringify(data));
 });
 
 
