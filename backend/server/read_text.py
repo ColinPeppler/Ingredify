@@ -1,6 +1,7 @@
 import re
 from flask import Flask, request
 import base64
+import csv
 
 def detect_text():
 	"""Detects text in the file."""
@@ -16,9 +17,11 @@ def detect_text():
 	response = client.text_detection(image=image)   
 	texts = response.text_annotations
 
-	ingredients = texts[0].description.split('INGREDIENTS:')[1]
+	print(texts[0].description)
+
+	ingredients = texts[0].description.split('S:')[1]
 	ingredients = re.split('[.,\n]', ingredients)
-	ingredients = list(map(lambda e: e.strip(), ingredients))
+	ingredients = list(map(normalize, ingredients))
 	ingredients = list(filter(lambda s: s != "", ingredients))
 
 	if response.error.message:
@@ -29,15 +32,31 @@ def detect_text():
 	
 	return ingredients
 
+def normalize(str_):
+	return str_.strip().upper().replace('\\', '').replace(';', '').replace('.', '').replace('/', '')
+
+
+def get_bad_effects():
+	effects_dict = {}
+	with open('db.csv') as db_file:
+		csv_reader = csv.reader(db_file, delimiter=',')
+		for row in csv_reader:
+			ingredient = row[0].strip().upper()
+			side_effects = row[1].split(';')
+			side_effects = list(map(normalize, side_effects))
+			effects_dict.update({ingredient : side_effects})
+	return effects_dict
+
+effects_dict = get_bad_effects()
 
 def detect_bad_effects(ingredients):
-	effects = {'VANILLIN': 'cancer'}
+	effects_dict = get_bad_effects()
 	found_effects = {}
 	for ingredient in ingredients:
-		if ingredient.upper() in effects.keys():
-			found_effects.update({ingredient : effects[ingredient.upper()]})
+		if ingredient.upper() in effects_dict.keys():
+			found_effects.update({ingredient : effects_dict[ingredient.upper()]})
 	return found_effects
-			
+
 
 
 app = Flask(__name__)
@@ -55,5 +74,6 @@ def predict():
 	r = detect_bad_effects(ingredients)
 	print(r)
 	return r
+
 app.run()
 
