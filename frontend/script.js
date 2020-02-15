@@ -62,7 +62,9 @@ save.addEventListener('click',(e)=>{
 
 	var formData = new FormData();
 	formData.append("img_file", image);
-	xhr.send(formData);
+
+	data = {'img_b64' : imgSrc}
+	xhr.send(JSON.stringify(data));
 });
 
 

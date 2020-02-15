@@ -2,14 +2,14 @@ import re
 from flask import Flask, request
 import base64
 
-def detect_text(image_file):
+def detect_text():
 	"""Detects text in the file."""
 	from google.cloud import vision
 	import io
 	client = vision.ImageAnnotatorClient()
 
-	#with io.open(path, 'rb') as image_file
-	content = image_file.read()
+	with io.open('img.jpg', 'rb') as image_file:
+		content = image_file.read()
 
 	image = vision.types.Image(content=content)
 
@@ -20,7 +20,6 @@ def detect_text(image_file):
 	ingredients = re.split('[.,\n]', ingredients)
 	ingredients = list(map(lambda e: e.strip(), ingredients))
 	ingredients = list(filter(lambda s: s != "", ingredients))
-	print(ingredients)
 
 	if response.error.message:
 		raise Exception(   
@@ -28,7 +27,17 @@ def detect_text(image_file):
 			'https://cloud.google.com/apis/design/errors'.format(
 				response.error.message))
 	
-	return ','.join(ingredients)
+	return ingredients
+
+
+def detect_bad_effects(ingredients):
+	effects = {'VANILLIN': 'cancer'}
+	found_effects = {}
+	for ingredient in ingredients:
+		if ingredient.upper() in effects.keys():
+			found_effects.update({ingredient : effects[ingredient.upper()]})
+	return found_effects
+			
 
 
 app = Flask(__name__)
@@ -36,10 +45,16 @@ app = Flask(__name__)
 ''' FLASK SHIT '''
 @app.route('/readtext', methods=['POST'])
 def predict():
-	print(request)
-	image_file = request.files['img_file']
-	return detect_text(image_file)
-	#return detect_text('./img.JPG')
+	data = request.get_json(force=True)
+	img_b64 = data['img_b64'].split('data:image/png;base64,')[1]
+	print(img_b64)
 
+	img_data = base64.b64decode(img_b64)
+	with open('img.jpg', 'wb') as f:
+		f.write(img_data)
+	ingredients = detect_text()
+	r = detect_bad_effects(ingredients)
+	print(r)
+	return r
 app.run()
 
