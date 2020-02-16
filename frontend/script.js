@@ -54,7 +54,7 @@ save.addEventListener('click',(e)=>{
 
   var xhr = new XMLHttpRequest();
 
-  endpoint = 'http://127.0.0.1:5000/readtext'
+  endpoint = 'http://35.245.191.120:8080/readtext'
   xhr.open('post', endpoint, true);
 
   data = {'img_b64' : imgSrc}
