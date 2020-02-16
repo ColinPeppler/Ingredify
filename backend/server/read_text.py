@@ -16,10 +16,13 @@ def detect_text():
 
         response = client.text_detection(image=image)   
         texts = response.text_annotations
+        texts = texts[0].description.upper()
 
-        print(texts[0].description)
+        print(texts)
 
-        ingredients = texts[0].description.split('S:')[1]
+        ingredients = texts
+        if 'ingredients'.upper() in texts:
+            ingredients = texts.split('S:')[1]
         ingredients = re.split('[.,\n]', ingredients)
         ingredients = list(map(normalize, ingredients))
         ingredients = list(filter(lambda s: s != "", ingredients))
@@ -38,13 +41,13 @@ def normalize(str_):
 
 def get_bad_effects():
         effects_dict = {}
-        with open('db.csv') as db_file:
+        with open('bad_db.csv') as db_file:
                 csv_reader = csv.reader(db_file, delimiter=',')
                 for row in csv_reader:
                         ingredient = row[0].strip().upper()
                         side_effects = row[1].split(';')
                         side_effects = list(map(normalize, side_effects))
-                        effects_dict.update({ingredient : side_effects})
+                        effects_dict.update([{ingredient : side_effects}, {'type': 'BAD'])
         return effects_dict
 
 effects_dict = get_bad_effects()
