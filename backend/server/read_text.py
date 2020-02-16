@@ -16,10 +16,13 @@ def detect_text():
 
         response = client.text_detection(image=image)   
         texts = response.text_annotations
+        texts = texts[0].description.upper()
 
-        print(texts[0].description)
+        print(texts)
 
-        ingredients = texts[0].description.split('S:')[1]
+        ingredients = texts
+        if 'ingredients'.upper() in texts:
+            ingredients = texts.split('S:')[1]
         ingredients = re.split('[.,\n]', ingredients)
         ingredients = list(map(normalize, ingredients))
         ingredients = list(filter(lambda s: s != "", ingredients))
