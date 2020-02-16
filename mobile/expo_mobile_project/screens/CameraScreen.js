@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, TouchableOpacity, Image} from 'react-native';
+import {Text, View, TouchableOpacity, Image, ActivityIndicator} from 'react-native';
 import {Camera} from 'expo-camera';
 import {Ionicons} from '@expo/vector-icons';
 
@@ -7,6 +7,7 @@ export default function App({navigation, route}) {
     const [hasPermission, setHasPermission] = useState(null);
     const [imageTaken, setImageTaken] = useState(false)
     const [isEditingImage, setIsEditingImage] = useState(false)
+    const [sendIsLoading, setSendisLoading] = useState(false)
     // const [confirmImage, setConfirmImage] = useState(true)
     const [imageb64, setImageB64] = useState('')
     const [type, setType] = useState(Camera.Constants.Type.back);
@@ -34,8 +35,7 @@ export default function App({navigation, route}) {
     }
 
     const sendImage = async () => {
-        // setConfirmImage(false);
-
+        setSendisLoading(true)
         const response = await fetch("http://35.245.191.120:8080/readtext", {
             method: "POST",
             headers: {},
@@ -47,11 +47,13 @@ export default function App({navigation, route}) {
 
         let response_body = await response.json()
             .then((response) => {
-                navigation.navigate('Links', {data: response})
+                navigation.navigate('Details', {data: response})
+                setSendisLoading(false)
             })
             .catch((error) => {
+                setSendisLoading(false)
                 console.log(error);
-        })
+            })
     }
 
     if (hasPermission === null) {
@@ -69,6 +71,27 @@ export default function App({navigation, route}) {
                         style={{width: '100%', height: '100%'}}
                         source={{uri: 'data:image/png;base64,' + imageb64}}
                     />
+
+                    <View style={{
+                        flex: 1,
+                        position: 'absolute',
+                        left: '42%',
+                        top: '42%',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        {sendIsLoading ? (<ActivityIndicator
+                            style={{
+                                backgroundColor: 'rgba(52, 52, 52, 0.8)',
+                                alignSelf: 'center',
+                                borderRadius: 8,
+                                height: 50,
+                                width: 50
+                            }}
+                            size="large" color="white"/>) : (null)}
+                    </View>
+
                     <View
                         style={{
                             flex: 1,
@@ -89,10 +112,10 @@ export default function App({navigation, route}) {
                                 justifyContent: 'space-between'
                             }}
                         >
-                                   <Ionicons name="md-refresh" size={48} color="white"
-                                              onPress={() => setImageTaken(false)}
-                                   />
-                                   <Ionicons name="md-checkmark-circle" size={48} color="white" onPress={() => sendImage()}/>
+                            <Ionicons name="md-refresh" size={48} color="white"
+                                      onPress={() => setImageTaken(false)}
+                            />
+                            <Ionicons name="md-checkmark-circle" size={48} color="white" onPress={() => sendImage()}/>
                             {/*We use onPress={() => func()} because if we do onPress={func()} then the func() will run immediately*/}
 
                         </TouchableOpacity>
@@ -120,7 +143,7 @@ export default function App({navigation, route}) {
                             }}
                             onPress={() => takePicture()}
                         >
-                            <Ionicons name="md-camera" size={48} color="white"/>
+                            <Ionicons name="ios-radio-button-on" size={64} color="white"/>
                         </TouchableOpacity>
                     </View>
                 </Camera>

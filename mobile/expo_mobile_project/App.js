@@ -53,7 +53,7 @@ export default function App(props) {
         <NavigationContainer ref={containerRef} initialState={initialNavigationState} >
           <Stack.Navigator initialRouteName="Root">
             <Stack.Screen name="Root" component={BottomTabNavigator}/>
-            <Stack.Screen name="Links" component={LinksScreen}/>
+            <Stack.Screen name="Details" component={LinksScreen}/>
           </Stack.Navigator>
         </NavigationContainer>
       </View>
