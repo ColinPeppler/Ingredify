@@ -3,9 +3,10 @@ import {Text, View, TouchableOpacity, Image} from 'react-native';
 import {Camera} from 'expo-camera';
 import {Ionicons} from '@expo/vector-icons';
 
-export default function App() {
+export default function App({navigation, route}) {
     const [hasPermission, setHasPermission] = useState(null);
     const [imageTaken, setImageTaken] = useState(false)
+    const [isEditingImage, setIsEditingImage] = useState(false)
     // const [confirmImage, setConfirmImage] = useState(true)
     const [imageb64, setImageB64] = useState('')
     const [type, setType] = useState(Camera.Constants.Type.back);
@@ -46,7 +47,7 @@ export default function App() {
 
         let response_body = await response.json()
             .then((response) => {
-                console.log(response)
+                navigation.navigate('Links', {data: response})
             })
             .catch((error) => {
                 console.log(error);
@@ -88,14 +89,13 @@ export default function App() {
                                 justifyContent: 'space-between'
                             }}
                         >
+                                   <Ionicons name="md-refresh" size={48} color="white"
+                                              onPress={() => setImageTaken(false)}
+                                   />
+                                   <Ionicons name="md-checkmark-circle" size={48} color="white" onPress={() => sendImage()}/>
                             {/*We use onPress={() => func()} because if we do onPress={func()} then the func() will run immediately*/}
-                            <Ionicons name="md-refresh" size={48} color="white"
-                                      onPress={() => setImageTaken(false)}/>
-                            <Ionicons name="md-checkmark-circle" size={48} color="white"
-                                      onPress={() => sendImage()}/>
 
                         </TouchableOpacity>
-
                     </View>
                 </View>
                 :

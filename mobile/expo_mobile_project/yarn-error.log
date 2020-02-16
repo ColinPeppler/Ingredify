@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/13.6.0/bin/node /usr/local/Cellar/yarn/1.21.1/libexec/bin/yarn.js add vector-icons
+  /usr/local/Cellar/node/13.6.0/bin/node /usr/local/Cellar/yarn/1.21.1/libexec/bin/yarn.js add expo-fonts
 
 PATH: 
   /Users/colinpeppler/anaconda3/bin:/Users/colinpeppler/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/vector-icons: Not found
+  Error: https://registry.yarnpkg.com/expo-fonts: Not found
       at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.21.1/libexec/lib/cli.js:66947:18)
       at Request.self.callback (/usr/local/Cellar/yarn/1.21.1/libexec/lib/cli.js:140665:22)
       at Request.emit (events.js:321:20)
@@ -52,6 +52,7 @@ npm manifest:
       "expo-camera": "^8.0.0",
       "expo-constants": "~8.0.0",
       "expo-font": "~8.0.0",
+      "expo-image-crop": "^0.2.17",
       "expo-web-browser": "~8.0.0",
       "react": "~16.9.0",
       "react-dom": "~16.9.0",

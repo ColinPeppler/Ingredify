@@ -1,24 +1,35 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
 
-export default function LinksScreen() {
+export default function LinksScreen({navigation, route}) {
+  console.log(route)
+    let text = ''
+  let side_effects = []
+  if (route.params != null) {
+    text = JSON.stringify(route.params.data)
+      console.log(route.params.data['SODIUM BENZOATE'])
+    for (let [key, value] of Object.entries(route.params.data)) {
+      side_effects.push({'key': key, 'value': value})
+        console.log(key + ' | ' + value)
+    }
+  }
+  // projects.map
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      {side_effects.map(side_effect => {<Text>{side_effect['key']}</Text>})}
       <OptionButton
         icon="md-school"
         label="Read the Expo documentation"
         onPress={() => WebBrowser.openBrowserAsync('https://docs.expo.io')}
       />
-
       <OptionButton
         icon="md-compass"
         label="Read the React Navigation documentation"
         onPress={() => WebBrowser.openBrowserAsync('https://reactnavigation.org')}
       />
-
       <OptionButton
         icon="ios-chatboxes"
         label="Ask a question on the forums"

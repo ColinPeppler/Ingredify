@@ -32,14 +32,14 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
         }}
       />
-        <BottomTab.Screen
-            name="Camera"
-            component={CameraScreen}
-            options={{
-                title: 'Camera',
-                tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
-            }}
-        />
+    <BottomTab.Screen
+        name="Camera"
+        component={CameraScreen}
+        options={{
+            title: 'Camera',
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-camera"/>,
+        }}
+    />
     </BottomTab.Navigator>
   );
 }
