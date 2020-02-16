@@ -49,7 +49,7 @@ function getHeaderTitle(route) {
 
   switch (routeName) {
     case 'Home':
-      return 'How to get started';
+      return 'Welcome to Ingredinet';
     case 'Links':
       return 'Links to learn more';
   }
