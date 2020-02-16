@@ -41,13 +41,13 @@ def normalize(str_):
 
 def get_bad_effects():
         effects_dict = {}
-        with open('db.csv') as db_file:
+        with open('bad_db.csv') as db_file:
                 csv_reader = csv.reader(db_file, delimiter=',')
                 for row in csv_reader:
                         ingredient = row[0].strip().upper()
                         side_effects = row[1].split(';')
                         side_effects = list(map(normalize, side_effects))
-                        effects_dict.update({ingredient : side_effects})
+                        effects_dict.update([{ingredient : side_effects}, {'type': 'BAD'])
         return effects_dict
 
 effects_dict = get_bad_effects()
